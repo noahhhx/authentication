@@ -1,6 +1,5 @@
 package com.noah.security;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -89,7 +88,7 @@ public class KeyUtils {
                 throw new RuntimeException(e);
             }
         } else {
-            if (Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.equals("prod"))) {
+            if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
                 throw new RuntimeException("public and private keys don't exist");
             }
         }

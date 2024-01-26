@@ -1,6 +1,5 @@
 package com.noah.db.document;
 
-import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;

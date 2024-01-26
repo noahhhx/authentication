@@ -6,7 +6,6 @@ import com.noah.dto.LoginDTO;
 import com.noah.dto.SignupDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.security.TokenGenerator;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController

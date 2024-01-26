@@ -27,7 +27,6 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@AllArgsConstructor
 public class KeyUtils {
 
     private final Environment environment;
@@ -46,6 +45,10 @@ public class KeyUtils {
 
     private KeyPair accessTokenKeyPair;
     private KeyPair refreshTokenKeyPair;
+
+    public KeyUtils(Environment environment) {
+        this.environment = environment;
+    }
 
     private KeyPair getAccessTokenKeyPair() {
         if (Objects.isNull(accessTokenKeyPair)) {

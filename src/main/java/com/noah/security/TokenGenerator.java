@@ -20,14 +20,12 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class TokenGenerator {
 
-    private final JwtEncoder accessTokenEncoder;
-    private final JwtEncoder refreshTokenEncoder;
+    @Autowired
+    JwtEncoder accessTokenEncoder;
 
-    public TokenGenerator(@Qualifier("jwtRefreshTokenEncoder") JwtEncoder refreshTokenEncoder,
-                          JwtEncoder accessTokenEncoder) {
-        this.accessTokenEncoder = accessTokenEncoder;
-        this.refreshTokenEncoder = refreshTokenEncoder;
-    }
+    @Autowired
+    @Qualifier("jwtRefreshTokenEncoder")
+    JwtEncoder refreshTokenEncoder;
 
     private String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();

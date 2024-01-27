@@ -1,6 +1,7 @@
-package com.noah.integration;
+package com.noah.integration.service;
 
 import com.noah.db.document.User;
+import com.noah.integration.MongoContainer;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

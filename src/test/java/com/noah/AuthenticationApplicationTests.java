@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AuthenticationApplicationTests extends MongoContainer {
 
     @Test
-    void contextLoads() {
+    void contextLoads() { // NOSONAR - Test it starts up
 
     }
 }

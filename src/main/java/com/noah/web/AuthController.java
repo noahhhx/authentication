@@ -6,8 +6,7 @@ import com.noah.dto.LoginDTO;
 import com.noah.dto.SignupDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.security.TokenGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,20 +27,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
-    UserDetailsManager userDetailsManager;
-    @Autowired
-    TokenGenerator tokenGenerator;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    @Qualifier("daoAuthenticationProvider")
-    DaoAuthenticationProvider daoAuthenticationProvider;
-    @Autowired
-    @Qualifier("jwtRefreshTokenAuthProvider")
-    JwtAuthenticationProvider refreshTokenAuthProvider;
+    private final UserDetailsManager userDetailsManager;
+    private final TokenGenerator tokenGenerator;
+    private final UserRepository userRepository;
+    private final DaoAuthenticationProvider daoAuthenticationProvider;
+    private final JwtAuthenticationProvider refreshTokenAuthProvider;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody SignupDTO signupDTO) {
@@ -50,7 +43,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }
         userDetailsManager.createUser(user);
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), Collections.EMPTY_LIST);
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), Collections.emptyList());
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
@@ -63,7 +56,7 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<TokenDTO> token(@RequestBody TokenDTO tokenDTO) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-        Jwt jwt = (Jwt) authentication.getCredentials();
+        // Jwt jwt = (Jwt) authentication.getCredentials();
         // check if present in db and not revoked, etc
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }

@@ -89,7 +89,7 @@ public class WebSecurity {
         return new NimbusJwtEncoder(jwks);
     }
 
-    @Bean(name = "jwtRefreshTokenAuthProvider")
+    @Bean
     JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);

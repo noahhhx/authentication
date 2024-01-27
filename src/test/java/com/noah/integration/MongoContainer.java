@@ -14,7 +14,7 @@ public abstract class MongoContainer {
 
     @Container
     @ServiceConnection
-    public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:6.0.9"));
+    public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {

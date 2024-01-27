@@ -1,13 +1,13 @@
 package com.noah.integration.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noah.db.document.User;
+import com.noah.db.document.repository.UserRepository;
 import com.noah.dto.LoginDTO;
 import com.noah.dto.SignupDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.integration.MongoContainer;
 import com.noah.service.UserManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -38,18 +38,28 @@ class AuthControllerTest extends MongoContainer {
     @Autowired
     private UserManager userManager;
 
+//    @Autowired
+//    private UserRepository userRepository;
+
     private static TokenDTO responseTokenDTO = null;
     private static final String USERNAME = "test";
     private static final String PASSWORD = "password";
+
+//    @AfterEach
+//    public void afterEach() {
+//        userRepository.deleteAll();
+//    }
 
     @Test
     @DisplayName("Register user")
     @Order(1)
     void testRegister() throws Exception {
-        SignupDTO signupDTO = new SignupDTO();
-        signupDTO.setUsername(USERNAME);
-        signupDTO.setPassword(PASSWORD);
-        String json = new ObjectMapper().writeValueAsString(signupDTO);
+        String json = new ObjectMapper().writeValueAsString(
+                SignupDTO.builder()
+                        .username(USERNAME)
+                        .password(PASSWORD)
+                        .build()
+        );
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/auth/register")
@@ -65,10 +75,12 @@ class AuthControllerTest extends MongoContainer {
     @DisplayName("Register with existing username")
     @Order(2)
     void testRegisterExistingUsername() throws Exception {
-        SignupDTO signupDTO = new SignupDTO();
-        signupDTO.setUsername(USERNAME);
-        signupDTO.setPassword(PASSWORD);
-        String json = new ObjectMapper().writeValueAsString(signupDTO);
+        String json = new ObjectMapper().writeValueAsString(
+                SignupDTO.builder()
+                        .username(USERNAME)
+                        .password(PASSWORD)
+                        .build()
+        );
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/auth/register")

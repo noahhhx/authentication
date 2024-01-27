@@ -1,6 +1,7 @@
 package com.noah.integration;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
@@ -12,7 +13,8 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class MongoContainer {
 
     @Container
-    public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+    @ServiceConnection
+    public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:6.0.9"));
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {

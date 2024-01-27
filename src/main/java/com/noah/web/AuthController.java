@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -38,12 +37,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody SignupDTO signupDTO) {
-        User user = new User(signupDTO.getUsername(), signupDTO.getPassword(), LocalDateTime.now());
-        if (!userRepository.findByUsername(signupDTO.getUsername()).equals(Optional.empty())) {
+        User user = new User(signupDTO.username(), signupDTO.password(), LocalDateTime.now());
+        if (!userRepository.findByUsername(signupDTO.username()).equals(Optional.empty())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }
         userDetailsManager.createUser(user);
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), Collections.emptyList());
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), Collections.emptyList());
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 

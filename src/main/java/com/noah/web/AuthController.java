@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody SignupDTO signupDTO) {
-        User user = new User(signupDTO.getUsername(), signupDTO.getPassword());
+        User user = new User(signupDTO.getUsername(), signupDTO.getPassword(), LocalDateTime.now());
         if (!userRepository.findByUsername(signupDTO.getUsername()).equals(Optional.empty())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }

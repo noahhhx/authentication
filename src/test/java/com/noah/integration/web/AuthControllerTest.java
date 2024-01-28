@@ -18,11 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -34,18 +36,15 @@ class AuthControllerTest extends MongoContainer {
     @Autowired
     private UserManager userManager;
 
+    private static final String REGISTER_URL = "/api/auth/register";
+    private static final String LOGIN_URL = "/api/auth/login";
+
     @Test
     @DisplayName("Register user")
     void testRegister() throws Exception {
         String username = "test";
         String json = getLoginJson(username, PASSWORD);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/auth/register")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
+        performPostRequestAndExpectStatus(json, REGISTER_URL, MockMvcResultMatchers.status().isOk());
         UserDetails loadedUser = userManager.loadUserByUsername(username);
         Assertions.assertEquals(username, loadedUser.getUsername());
     }
@@ -59,12 +58,7 @@ class AuthControllerTest extends MongoContainer {
                         .password(PASSWORD)
                         .build()
         );
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/auth/register")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+        performPostRequestAndExpectStatus(json, REGISTER_URL, MockMvcResultMatchers.status().is4xxClientError())
                 .andExpect(content().string("User already exists"));
     }
 
@@ -72,14 +66,8 @@ class AuthControllerTest extends MongoContainer {
     @DisplayName("Test Login")
     void testLogin() throws Exception {
         String json = getLoginJson(USERNAME, PASSWORD);
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/auth/login")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        MvcResult result = performPostRequestAndExpectStatus(json, LOGIN_URL, MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-
         TokenDTO responseTokenDTO = new ObjectMapper().readValue(
                 result.getResponse().getContentAsString(),
                 TokenDTO.class
@@ -91,38 +79,22 @@ class AuthControllerTest extends MongoContainer {
     @DisplayName("Test Invalid Login")
     void testInvalidLogin() throws Exception {
         String json = getLoginJson(USERNAME, PASSWORD + "wrong");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/auth/login")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+        performPostRequestAndExpectStatus(json, LOGIN_URL, MockMvcResultMatchers.status().is4xxClientError());
     }
 
     @Test
     @DisplayName("Test Refresh Token")
     void testRefreshToken() throws Exception {
         String loginJson = getLoginJson(USERNAME, PASSWORD);
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/auth/login")
-                        .content(loginJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        MvcResult result = performPostRequestAndExpectStatus(loginJson, LOGIN_URL, MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-
         TokenDTO responseTokenDTO = new ObjectMapper().readValue(
                 result.getResponse().getContentAsString(),
                 TokenDTO.class
         );
         Assertions.assertNotNull(responseTokenDTO);
-
         String tokenJson = new ObjectMapper().writeValueAsString(responseTokenDTO);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/auth/token")
-                        .content(tokenJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        performPostRequestAndExpectStatus(tokenJson, "/api/auth/token", MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
     }
 
@@ -132,5 +104,13 @@ class AuthControllerTest extends MongoContainer {
                 password
         );
         return new ObjectMapper().writeValueAsString(loginDTO);
+    }
+
+    private ResultActions performPostRequestAndExpectStatus(String content, String url, ResultMatcher statusMatcher) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
+                        .post(url)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(statusMatcher);
     }
 }

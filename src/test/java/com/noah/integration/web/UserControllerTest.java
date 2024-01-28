@@ -35,7 +35,7 @@ class UserControllerTest extends MongoContainer {
                 .id("id")
                 .username(USERNAME + "1")
                 .password(PASSWORD)
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .build();
         userManager.createUser(mockUser);
 
@@ -43,6 +43,6 @@ class UserControllerTest extends MongoContainer {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"id\":\"id\",\"username\":\"USER1\",\"createdAt\":\""+mockUser.getCreatedAt().truncatedTo(ChronoUnit.MILLIS)+"\"}"));
+                .andExpect(content().json("{\"id\":\"id\",\"username\":\"USER1\",\"createdAt\":\""+mockUser.getCreatedAt()+"\"}"));
     }
 }

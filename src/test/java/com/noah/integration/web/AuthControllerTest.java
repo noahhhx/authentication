@@ -75,10 +75,18 @@ class AuthControllerTest extends MongoContainer {
     }
 
     @Test
-    @DisplayName("Test Invalid Login")
+    @DisplayName("Test Invalid Login - via password")
     void testInvalidLogin() throws Exception {
         String json = getLoginJson(USERNAME, PASSWORD + "wrong");
         performPostRequestAndExpectStatus(json, LOGIN_URL, MockMvcResultMatchers.status().is4xxClientError());
+    }
+
+    @Test
+    @DisplayName("Test Invalid Login - user doesn't exist")
+    void testLoginWithFakeUser() throws Exception {
+        String json = getLoginJson(USERNAME + "1", PASSWORD);
+        performPostRequestAndExpectStatus(json, LOGIN_URL, MockMvcResultMatchers.status().isUnauthorized())
+                .andExpect(content().string("Invalid username or password"));
     }
 
     @Test

@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>com.noah</groupId>
-	<artifactId>JWT-Authentication</artifactId>
+	<artifactId>jwt-authentication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JWT-Authentication</name>
 	<description>JWT-Authentication</description>

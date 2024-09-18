@@ -20,6 +20,14 @@
 		<java.version>17</java.version>
 	</properties>
 
+	<distributionManagement>
+	   <repository>
+	     <id>github</id>
+	     <name>GitHub noahgiles1 Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/noahgiles1/JWT-Authentication</url>
+	   </repository>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

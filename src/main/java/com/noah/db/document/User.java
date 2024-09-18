@@ -3,6 +3,7 @@ package com.noah.db.document;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,20 @@ public class User implements UserDetails {
     private String password;
     @NonNull
     private LocalDateTime createdAt;
+    private Collection<GrantedAuthority> authorities;
+    @Getter
+    private Integer failedAttempts;
+    private Boolean accountLocked;
+    private Boolean credentialsExpired;
+    private Boolean enabled;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        if (authorities == null) {
+            return Collections.emptyList();
+        }
+        return authorities;
     }
 
     @Override
@@ -52,16 +62,26 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        if (accountLocked == null) {
+            return true;
+        }
+        return !accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        if (credentialsExpired == null) {
+            return true;
+        }
+        return !credentialsExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        if (enabled == null) {
+            return true;
+        }
+        return enabled;
     }
+
 }

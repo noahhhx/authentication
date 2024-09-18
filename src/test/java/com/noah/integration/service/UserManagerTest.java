@@ -12,8 +12,10 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
@@ -27,8 +29,12 @@ class UserManagerTest extends MongoContainer {
 
     @Autowired
     private UserManager userManager;
+
     @Autowired
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("Create user works")
@@ -66,5 +72,41 @@ class UserManagerTest extends MongoContainer {
     @DisplayName("User doesn't exist")
     void testUsernameNotFound() {
         assertThrows(UsernameNotFoundException.class, () -> userManager.loadUserByUsername("fake_user"));
+    }
+
+    @Test
+    @DisplayName("Test Change Password by Username")
+    void testChangePasswordByUsername() {
+        String newPassword = PASSWORD + "new";
+
+        //Test UserManager
+        userManager.changePasswordByUsername(USERNAME, PASSWORD, newPassword);
+        UserDetails user = userManager.loadUserByUsername(USERNAME);
+
+        // Verify password changed successfully
+        Assertions.assertTrue(passwordEncoder.matches(newPassword, user.getPassword()));
+
+    }
+
+    @Test
+    @DisplayName("Test Change Password by Bad Username")
+    void testChangePasswordwithBadUsername() {
+        String newPassword = PASSWORD + "new";
+
+        //Test UserManager
+        Assertions.assertThrows(
+                UsernameNotFoundException.class, () ->
+                userManager.changePasswordByUsername(USERNAME + "1", PASSWORD, newPassword)
+        );
+    }
+
+    @Test
+    void testChangePasswordByUsernameWithIncorrectOldPassword() {
+        String newPassword = PASSWORD + "new";
+        String incorrectOldPassword = PASSWORD + "wrong";
+
+        // Expect exception
+        Assertions.assertThrows(BadCredentialsException.class, () ->
+                userManager.changePasswordByUsername(USERNAME, incorrectOldPassword, newPassword));
     }
 }

@@ -3,6 +3,7 @@ package com.noah.integration.web;
 import com.noah.db.document.User;
 import com.noah.integration.MongoContainer;
 import com.noah.service.UserManager;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +31,7 @@ class UserControllerTest extends MongoContainer {
     private UserManager userManager;
 
     @Test
+    @DisplayName("Test get user")
     void testGetUser() throws Exception {
         User mockUser = User.builder()
                 .id("id")

@@ -1,11 +1,10 @@
 package com.noah.web;
 
 import com.noah.db.document.User;
-import com.noah.db.document.repository.UserRepository;
 import com.noah.dto.LoginDTO;
-import com.noah.dto.SignupDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.security.TokenGenerator;
+import com.noah.service.UserManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,43 +31,49 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AuthController {
 
-    private final UserDetailsManager userDetailsManager;
-    private final TokenGenerator tokenGenerator;
-    private final UserRepository userRepository;
-    private final DaoAuthenticationProvider daoAuthenticationProvider;
-    private final JwtAuthenticationProvider refreshTokenAuthProvider;
+	private final UserDetailsManager userDetailsManager;
+	private final TokenGenerator tokenGenerator;
+	private final UserManager userManager;
+	private final DaoAuthenticationProvider daoAuthenticationProvider;
+	private final JwtAuthenticationProvider refreshTokenAuthProvider;
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody SignupDTO signupDTO) {
-        User user = new User(signupDTO.username(), signupDTO.password(), LocalDateTime.now());
-        if (!userRepository.findByUsername(signupDTO.username()).equals(Optional.empty())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
-        }
-        userDetailsManager.createUser(user);
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), Collections.emptyList());
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
-    }
+	@PostMapping("/register")
+	public ResponseEntity<Object> register(@RequestBody LoginDTO LoginDTO) {
+		User user = new User(LoginDTO.username(), LoginDTO.password(), LocalDateTime.now());
+		if (isUserExists(LoginDTO.username())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+		}
+		userDetailsManager.createUser(user);
+		Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, LoginDTO.password(), Collections.emptyList());
+		return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
-        if (!userDetailsManager.userExists(loginDTO.username())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
-        Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.username(), loginDTO.password()));
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
-    }
+	@PostMapping("/login")
+	public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
+		if (!userDetailsManager.userExists(loginDTO.username())) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+		}
+		Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.username(), loginDTO.password()));
+		return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+	}
 
-    @PostMapping("/token")
-    public ResponseEntity<Object> token(@RequestBody TokenDTO tokenDTO) {
-        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-        Jwt jwt = (Jwt) authentication.getCredentials();
-        User user = userRepository.findById(jwt.getSubject())
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        MessageFormat.format("ID {0} not found for any user", jwt.getSubject())
-                ));
-        if (!user.isAccountNonLocked()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is locked");
-        }
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
-    }
+	@PostMapping("/token")
+	public ResponseEntity<Object> token(@RequestBody TokenDTO tokenDTO) {
+		Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
+		Jwt jwt = (Jwt) authentication.getCredentials();
+		User user = userManager.findById(jwt.getSubject());
+		if (!user.isAccountNonLocked()) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is locked");
+		}
+		return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+	}
+
+	private boolean isUserExists(String username) {
+		try {
+			userManager.loadUserByUsername(username);
+			return true;
+		} catch (UsernameNotFoundException e) {
+			return false;
+		}
+	}
 }

@@ -1,8 +1,8 @@
 package com.noah.web;
 
 import com.noah.db.document.User;
-import com.noah.db.document.repository.UserRepository;
 import com.noah.dto.UserDTO;
+import com.noah.service.UserManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
     @GetMapping("/{id}")
     @PreAuthorize("#user.id == #id")
     public ResponseEntity<UserDTO> user(@AuthenticationPrincipal User user, @PathVariable String id) {
-        return ResponseEntity.ok(UserDTO.from(userRepository.findById(id).orElseThrow()));
+        return ResponseEntity.ok(UserDTO.from(userManager.findById(id)));
     }
 }

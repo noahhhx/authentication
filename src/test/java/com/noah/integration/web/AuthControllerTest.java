@@ -3,7 +3,6 @@ package com.noah.integration.web;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noah.dto.LoginDTO;
-import com.noah.dto.SignupDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.integration.MongoContainer;
 import com.noah.service.UserManager;
@@ -52,7 +51,7 @@ class AuthControllerTest extends MongoContainer {
     @DisplayName("Register with existing username")
     void testRegisterExistingUsername() throws Exception {
         String json = new ObjectMapper().writeValueAsString(
-                SignupDTO.builder()
+                LoginDTO.builder()
                         .username(USERNAME)
                         .password(PASSWORD)
                         .build()

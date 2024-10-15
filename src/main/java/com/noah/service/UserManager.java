@@ -1,7 +1,7 @@
 package com.noah.service;
 
 import com.noah.db.document.User;
-import com.noah.db.document.repository.UserRepository;
+import com.noah.db.document.repository.BaseUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 @AllArgsConstructor
 public class UserManager implements UserDetailsManager {
 
-    private final UserRepository userRepository;
+    private final BaseUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -75,5 +75,11 @@ public class UserManager implements UserDetailsManager {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         MessageFormat.format("Username {0} not found", username)
                 ));
+    }
+
+    public User findById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
+                MessageFormat.format("ID {0} not found for any user", id)
+        ));
     }
 }

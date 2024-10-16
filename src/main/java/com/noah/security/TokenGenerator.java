@@ -1,8 +1,7 @@
 package com.noah.security;
 
-import com.noah.db.document.User;
+import com.noah.db.User;
 import com.noah.dto.TokenDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -37,7 +36,7 @@ public class TokenGenerator {
                 .issuer("myApp")
                 .issuedAt(now)
                 .expiresAt(now.plus(5, ChronoUnit.MINUTES))
-                .subject(user.getId())
+                .subject(String.valueOf(user.getId()))
                 .build();
 
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
@@ -51,7 +50,7 @@ public class TokenGenerator {
                 .issuer("myApp")
                 .issuedAt(now)
                 .expiresAt(now.plus(30, ChronoUnit.DAYS))
-                .subject(user.getId())
+                .subject(String.valueOf(user.getId()))
                 .build();
 
         return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
@@ -65,7 +64,7 @@ public class TokenGenerator {
         }
 
         TokenDTO tokenDTO = new TokenDTO();
-        tokenDTO.setUserId(user.getId());
+        tokenDTO.setUserId(String.valueOf(user.getId()));
         tokenDTO.setAccessToken(createAccessToken(authentication));
 
         String refreshToken;

@@ -1,7 +1,8 @@
 package com.noah.integration.service;
 
 import com.noah.db.document.User;
-import com.noah.integration.MongoContainer;
+import com.noah.integration.config.BaseTest;
+import com.noah.integration.config.MultiDbTest;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Testcontainers
 @SpringBootTest
-class UserManagerTest extends MongoContainer {
+class UserManagerTest extends BaseTest {
 
     @Autowired
     private UserManager userManager;
@@ -36,7 +37,7 @@ class UserManagerTest extends MongoContainer {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Test
+    @MultiDbTest
     @DisplayName("Create user works")
     void testCreateUser() {
         userManager.createUser(User.builder()

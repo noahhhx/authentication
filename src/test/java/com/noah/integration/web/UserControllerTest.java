@@ -1,7 +1,7 @@
 package com.noah.integration.web;
 
 import com.noah.db.document.User;
-import com.noah.integration.MongoContainer;
+import com.noah.integration.config.BaseTest;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class UserControllerTest extends MongoContainer {
+class UserControllerTest extends BaseTest {
 
     @Autowired
     private MockMvc mockMvc;

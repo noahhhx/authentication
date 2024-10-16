@@ -31,73 +31,73 @@ import java.util.UUID;
 @AllArgsConstructor
 public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    @NonNull
-    @Column(unique = true)
-    private String username;
+  @NonNull
+  @Column(unique = true)
+  private String username;
 
-    @NonNull
-    private String password;
+  @NonNull
+  private String password;
 
-    @NonNull
-    private LocalDateTime createdAt;
+  @NonNull
+  private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Authority> authorities = new HashSet<>();
+  @OneToMany(mappedBy = "user")
+  private Set<Authority> authorities = new HashSet<>();
 
-    @Getter
-    private Integer failedAttempts;
+  @Getter
+  private Integer failedAttempts;
 
-    private Boolean accountLocked;
+  private Boolean accountLocked;
 
-    private Boolean credentialsExpired;
+  private Boolean credentialsExpired;
 
-    private Boolean enabled;
+  private Boolean enabled;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (authorities == null) {
-            return Collections.emptyList();
-        }
-        return authorities;
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (authorities == null) {
+      return Collections.emptyList();
     }
+    return authorities;
+  }
 
-    @Override
-    public @NonNull String getUsername() {
-        return username;
-    }
+  @Override
+  public @NonNull String getUsername() {
+    return username;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        if (accountLocked == null) {
-            return true;
-        }
-        return !accountLocked;
+  @Override
+  public boolean isAccountNonLocked() {
+    if (accountLocked == null) {
+      return true;
     }
+    return !accountLocked;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        if (credentialsExpired == null) {
-            return true;
-        }
-        return !credentialsExpired;
+  @Override
+  public boolean isCredentialsNonExpired() {
+    if (credentialsExpired == null) {
+      return true;
     }
+    return !credentialsExpired;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        if (enabled == null) {
-            return true;
-        }
-        return enabled;
+  @Override
+  public boolean isEnabled() {
+    if (enabled == null) {
+      return true;
     }
+    return enabled;
+  }
 
 }

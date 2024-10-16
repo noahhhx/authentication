@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 
 @Builder
-public record LoginDTO(
+public record LoginDto(
         String username, String password
-){
-	public String loginJson() throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(this);
-	}
+) {
+  public String loginJson() throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.writeValueAsString(this);
+  }
 }

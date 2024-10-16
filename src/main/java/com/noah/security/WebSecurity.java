@@ -18,29 +18,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class WebSecurity {
 
-    private final JwtToUserConverter jwtToUserConverter;
+  private final JwtToUserConverter jwtToUserConverter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/api/auth/*"
-                        )
-                        .permitAll()
-                        .anyRequest().authenticated()
-                )
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                );
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(
+                            "/api/auth/*"
+                    )
+                    .permitAll()
+                    .anyRequest().authenticated()
+            )
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .oauth2ResourceServer(oauth2 ->
+                    oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
+            )
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptions -> exceptions
+                    .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+    return http.build();
+  }
 }

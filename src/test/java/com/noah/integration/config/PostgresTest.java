@@ -22,40 +22,37 @@ import java.time.LocalDateTime;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class PostgresTest {
 
-    @Autowired
-    private UserRepository userRepository;
+  public static final String USERNAME = "USER";
+  public static final String PASSWORD = "PASSWORD";
+  @Container
+  @ServiceConnection
+  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private UserManager userManager;
 
-    @Autowired
-    private UserManager userManager;
+  @DynamicPropertySource
+  static void dynamicProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.data.mongodb.uri", postgreSQLContainer::getJdbcUrl);
+  }
 
-    public static final String USERNAME = "USER";
-    public static final String PASSWORD = "PASSWORD";
+  @BeforeAll
+  public static void beforeAll() {
+    postgreSQLContainer.start();
+  }
 
-    @BeforeEach
-    public void beforeEach() {
-        userManager.createUser(User.builder()
-                .username(USERNAME)
-                .password(PASSWORD)
-                .createdAt(LocalDateTime.now())
-                .build());
-    }
+  @BeforeEach
+  public void beforeEach() {
+    userManager.createUser(User.builder()
+            .username(USERNAME)
+            .password(PASSWORD)
+            .createdAt(LocalDateTime.now())
+            .build());
+  }
 
-    @AfterEach
-    public void afterEach() {
-        userRepository.deleteAll();
-    }
-
-    @Container
-    @ServiceConnection
-	public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
-
-    @DynamicPropertySource
-    static void dynamicProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", postgreSQLContainer::getJdbcUrl);
-    }
-
-    @BeforeAll
-    public static void beforeAll() {
-        postgreSQLContainer.start();
-    }
+  @AfterEach
+  public void afterEach() {
+    userRepository.deleteAll();
+  }
 }

@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AuthenticationApplicationTests extends PostgresTest {
 
-    @Test
-    void contextLoads() { // NOSONAR - Test it starts up
+  @Test
+  void contextLoads() { // NOSONAR - Test it starts up
 
-    }
+  }
 }

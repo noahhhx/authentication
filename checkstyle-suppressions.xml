@@ -1,0 +1,13 @@
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD Suppressions 1.0//EN"
+        "https://checkstyle.org/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+    <!-- Suppress all Javadoc checks -->
+    <suppress files="" checks="JavadocType"/>
+    <suppress files="" checks="JavadocMethod"/>
+    <suppress files="" checks="JavadocVariable"/>
+
+    <!-- Suppress all import order checks -->
+    <suppress files="" checks="CustomImportOrder"/>
+</suppressions>

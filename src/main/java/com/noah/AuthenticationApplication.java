@@ -11,12 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableJpaRepositories
 public class AuthenticationApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AuthenticationApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(AuthenticationApplication.class, args);
+  }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

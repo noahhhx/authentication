@@ -17,70 +17,70 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserManager implements UserDetailsManager {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void createUser(UserDetails user) {
-        ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
-        User test = userRepository.save((User) user);
-    }
+  @Override
+  public void createUser(UserDetails user) {
+    ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
+    User test = userRepository.save((User) user);
+  }
 
-    @Override
-    public void updateUser(UserDetails user) {
-        userRepository.save((User) user);
-    }
+  @Override
+  public void updateUser(UserDetails user) {
+    userRepository.save((User) user);
+  }
 
-    @Override
-    public void deleteUser(String username) {
-        userRepository.deleteUserByUsername(username);
-    }
+  @Override
+  public void deleteUser(String username) {
+    userRepository.deleteUserByUsername(username);
+  }
 
-    public void changePasswordById(Long id, String oldPassword, String newPassword) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        MessageFormat.format("ID {0} not found for any user", id)
-                ));
-        changePassword(user, oldPassword, newPassword);
-    }
+  public void changePasswordById(Long id, String oldPassword, String newPassword) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new UsernameNotFoundException(
+                    MessageFormat.format("ID {0} not found for any user", id)
+            ));
+    changePassword(user, oldPassword, newPassword);
+  }
 
-    public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        MessageFormat.format("Username {0} not found", username)
-                ));
-        changePassword(user, oldPassword, newPassword);
-    }
+  public void changePasswordByUsername(String username, String oldPassword, String newPassword) {
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException(
+                    MessageFormat.format("Username {0} not found", username)
+            ));
+    changePassword(user, oldPassword, newPassword);
+  }
 
-    public void changePassword(User user, String oldPassword, String newPassword) {
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new BadCredentialsException("Old password doesn't match");
-        }
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+  public void changePassword(User user, String oldPassword, String newPassword) {
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new BadCredentialsException("Old password doesn't match");
     }
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
 
-    @Override
-    public void changePassword(String oldPassword, String newPassword) {
-        // TODO don't we need something that identifies the user to be able to update the password?
-    }
+  @Override
+  public void changePassword(String oldPassword, String newPassword) {
+    // TODO don't we need something that identifies the user to be able to update the password?
+  }
 
-    @Override
-    public boolean userExists(String username) {
-        return userRepository.existsByUsername(username);
-    }
+  @Override
+  public boolean userExists(String username) {
+    return userRepository.existsByUsername(username);
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        MessageFormat.format("Username {0} not found", username)
-                ));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException(
+                    MessageFormat.format("Username {0} not found", username)
+            ));
+  }
 
-    public User findById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
-                MessageFormat.format("ID {0} not found for any user", id)
-        ));
-    }
+  public User findById(UUID id) {
+    return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
+            MessageFormat.format("ID {0} not found for any user", id)
+    ));
+  }
 }

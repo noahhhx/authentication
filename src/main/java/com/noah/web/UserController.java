@@ -1,6 +1,6 @@
 package com.noah.web;
 
-import com.noah.dto.UserDTO;
+import com.noah.dto.UserDto;
 import com.noah.service.UserManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserManager userManager;
+  private final UserManager userManager;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> user(@PathVariable UUID id) {
-        return ResponseEntity.ok(UserDTO.from(userManager.findById(id)));
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<UserDto> user(@PathVariable UUID id) {
+    return ResponseEntity.ok(UserDto.from(userManager.findById(id)));
+  }
 }

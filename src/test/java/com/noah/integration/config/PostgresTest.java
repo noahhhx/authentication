@@ -1,7 +1,7 @@
-package com.noah.integration;
+package com.noah.integration.config;
 
-import com.noah.db.document.User;
-import com.noah.db.document.repository.UserRepository;
+import com.noah.db.User;
+import com.noah.db.repository.UserRepository;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +11,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class MongoContainer {
+public abstract class PostgresTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -47,15 +47,15 @@ public abstract class MongoContainer {
 
     @Container
     @ServiceConnection
-    public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+	public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
+        registry.add("spring.data.mongodb.uri", postgreSQLContainer::getJdbcUrl);
     }
 
     @BeforeAll
     public static void beforeAll() {
-        mongoDBContainer.start();
+        postgreSQLContainer.start();
     }
 }

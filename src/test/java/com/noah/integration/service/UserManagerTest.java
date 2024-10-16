@@ -1,17 +1,14 @@
 package com.noah.integration.service;
 
-import com.noah.db.document.User;
-import com.noah.integration.MongoContainer;
+import com.noah.db.User;
+import com.noah.integration.config.PostgresTest;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,19 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-class UserManagerTest extends MongoContainer {
+class UserManagerTest extends PostgresTest {
 
     @Autowired
     private UserManager userManager;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,10 +38,7 @@ class UserManagerTest extends MongoContainer {
                 .password(PASSWORD)
                 .createdAt(LocalDateTime.now())
                 .build());
-        Query query = new Query();
-        query.addCriteria(Criteria.where("username").is(USERNAME));
-        List<User> users = mongoTemplate.find(query, User.class);
-        Assertions.assertEquals(1, users.size());
+        assertTrue(userManager.userExists(USERNAME + "1"));
     }
 
     @Test
@@ -58,7 +49,7 @@ class UserManagerTest extends MongoContainer {
                 .password(PASSWORD)
                 .createdAt(LocalDateTime.now())
                 .build();
-        assertThrows(DuplicateKeyException.class, () -> userManager.createUser(user));
+        assertThrows(DataIntegrityViolationException.class, () -> userManager.createUser(user));
     }
 
     @Test

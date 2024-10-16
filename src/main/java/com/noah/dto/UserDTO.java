@@ -1,16 +1,17 @@
 package com.noah.dto;
 
-import com.noah.db.document.User;
+import com.noah.db.User;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @Data
 public class UserDTO {
 
-    private String id;
+    private UUID id;
     private String username;
     private LocalDateTime createdAt;
 

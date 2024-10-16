@@ -1,6 +1,6 @@
 package com.noah.web;
 
-import com.noah.db.document.User;
+import com.noah.db.User;
 import com.noah.dto.LoginDTO;
 import com.noah.dto.TokenDTO;
 import com.noah.security.TokenGenerator;
@@ -21,10 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,7 +60,7 @@ public class AuthController {
 	public ResponseEntity<Object> token(@RequestBody TokenDTO tokenDTO) {
 		Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
 		Jwt jwt = (Jwt) authentication.getCredentials();
-		User user = userManager.findById(jwt.getSubject());
+		User user = userManager.findById(UUID.fromString(jwt.getSubject()));
 		if (!user.isAccountNonLocked()) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is locked");
 		}

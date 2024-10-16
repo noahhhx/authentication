@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noah.dto.LoginDTO;
 import com.noah.dto.TokenDTO;
-import com.noah.integration.MongoContainer;
+import com.noah.integration.config.PostgresTest;
 import com.noah.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class AuthControllerTest extends MongoContainer {
+class AuthControllerTest extends PostgresTest {
 
     @Autowired
     private MockMvc mockMvc;

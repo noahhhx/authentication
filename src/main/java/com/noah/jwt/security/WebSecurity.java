@@ -1,4 +1,4 @@
-package com.noah.security;
+package com.noah.jwt.security;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +23,9 @@ public class WebSecurity {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
+            .securityMatcher("/api/auth/*", "/api/users/*")
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(
-                            "/api/auth/*"
-                    )
-                    .permitAll()
+                    .requestMatchers("/api/auth/*").permitAll()
                     .anyRequest().authenticated()
             )
             .csrf(AbstractHttpConfigurer::disable)

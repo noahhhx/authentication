@@ -1,8 +1,8 @@
-package com.noah.integration.config;
+package com.noah.jwt.integration.config;
 
-import com.noah.db.User;
-import com.noah.db.repository.UserRepository;
-import com.noah.service.UserManager;
+import com.noah.jwt.db.User;
+import com.noah.jwt.db.repository.UserRepository;
+import com.noah.jwt.service.UserManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

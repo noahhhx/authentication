@@ -1,4 +1,4 @@
-package com.noah.dto;
+package com.noah.jwt.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

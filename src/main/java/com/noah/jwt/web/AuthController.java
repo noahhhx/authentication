@@ -1,10 +1,10 @@
-package com.noah.web;
+package com.noah.jwt.web;
 
-import com.noah.db.User;
-import com.noah.dto.LoginDto;
-import com.noah.dto.TokenDto;
-import com.noah.security.TokenGenerator;
-import com.noah.service.UserManager;
+import com.noah.jwt.db.User;
+import com.noah.jwt.dto.LoginDto;
+import com.noah.jwt.dto.TokenDto;
+import com.noah.jwt.security.TokenGenerator;
+import com.noah.jwt.service.UserManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

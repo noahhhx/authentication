@@ -1,8 +1,8 @@
-package com.noah.integration.service;
+package com.noah.jwt.integration.service;
 
-import com.noah.db.User;
-import com.noah.integration.config.PostgresTest;
-import com.noah.service.UserManager;
+import com.noah.jwt.db.User;
+import com.noah.jwt.integration.config.PostgresTest;
+import com.noah.jwt.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

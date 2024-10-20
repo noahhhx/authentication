@@ -1,6 +1,6 @@
-package com.noah;
+package com.noah.jwt;
 
-import com.noah.integration.config.PostgresTest;
+import com.noah.jwt.integration.config.PostgresTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

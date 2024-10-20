@@ -1,4 +1,4 @@
-package com.noah.security;
+package com.noah.jwt.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

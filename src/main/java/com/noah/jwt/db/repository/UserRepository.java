@@ -1,6 +1,6 @@
-package com.noah.db.repository;
+package com.noah.jwt.db.repository;
 
-import com.noah.db.User;
+import com.noah.jwt.db.User;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 

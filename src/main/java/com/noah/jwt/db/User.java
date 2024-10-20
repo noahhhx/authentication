@@ -1,4 +1,4 @@
-package com.noah.db;
+package com.noah.jwt.db;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

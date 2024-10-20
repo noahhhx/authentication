@@ -1,4 +1,4 @@
-package com.noah.dto;
+package com.noah.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

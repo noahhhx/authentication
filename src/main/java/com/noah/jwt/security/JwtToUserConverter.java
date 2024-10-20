@@ -1,6 +1,6 @@
-package com.noah.security;
+package com.noah.jwt.security;
 
-import com.noah.db.User;
+import com.noah.jwt.db.User;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;

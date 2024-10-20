@@ -1,7 +1,7 @@
-package com.noah.security;
+package com.noah.jwt.security;
 
-import com.noah.db.User;
-import com.noah.dto.TokenDto;
+import com.noah.jwt.db.User;
+import com.noah.jwt.dto.TokenDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

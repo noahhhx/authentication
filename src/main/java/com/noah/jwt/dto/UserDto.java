@@ -1,6 +1,6 @@
-package com.noah.dto;
+package com.noah.jwt.dto;
 
-import com.noah.db.User;
+import com.noah.jwt.db.User;
 import lombok.Builder;
 import lombok.Data;
 

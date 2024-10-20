@@ -1,7 +1,7 @@
-package com.noah.service;
+package com.noah.jwt.service;
 
-import com.noah.db.User;
-import com.noah.db.repository.UserRepository;
+import com.noah.jwt.db.User;
+import com.noah.jwt.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;

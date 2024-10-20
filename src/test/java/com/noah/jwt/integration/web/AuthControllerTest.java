@@ -1,11 +1,11 @@
-package com.noah.integration.web;
+package com.noah.jwt.integration.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noah.dto.LoginDto;
-import com.noah.dto.TokenDto;
-import com.noah.integration.config.PostgresTest;
-import com.noah.service.UserManager;
+import com.noah.jwt.dto.LoginDto;
+import com.noah.jwt.dto.TokenDto;
+import com.noah.jwt.integration.config.PostgresTest;
+import com.noah.jwt.service.UserManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

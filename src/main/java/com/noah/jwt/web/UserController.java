@@ -1,7 +1,7 @@
-package com.noah.web;
+package com.noah.jwt.web;
 
-import com.noah.dto.UserDto;
-import com.noah.service.UserManager;
+import com.noah.jwt.dto.UserDto;
+import com.noah.jwt.service.UserManager;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

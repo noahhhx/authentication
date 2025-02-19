@@ -1,0 +1,7 @@
+ACCESS_TOKEN_PRIVATE_KEY_PATH: "access-refresh-token-keys/access-token-private.key"
+ACCESS_TOKEN_PUBLIC_KEY_PATH: "access-refresh-token-keys/access-token-public.key"
+REFRESH_TOKEN_PRIVATE_KEY_PATH: "access-refresh-token-keys/refresh-token-private.key"
+REFRESH_TOKEN_PUBLIC_KEY_PATH: "access-refresh-token-keys/refresh-token-public.key"
+DATASOURCE_URL: "jdbc:postgresql://localhost:5432/my_db"
+DATASOURCE_USERNAME: "my_user"
+DATASOURCE_PASSWORD: "password"

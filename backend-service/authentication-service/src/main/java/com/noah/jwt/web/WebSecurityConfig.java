@@ -26,8 +26,8 @@ public class WebSecurityConfig {
     http
             .securityMatcher("/api/auth/*", "/api/users/*")
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/auth/*").permitAll()
-                    .anyRequest().authenticated()
+                .requestMatchers("/api/auth/*").permitAll()
+                .anyRequest().authenticated()
             )
             .csrf(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)

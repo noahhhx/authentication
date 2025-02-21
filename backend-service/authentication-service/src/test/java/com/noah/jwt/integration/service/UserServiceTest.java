@@ -1,6 +1,7 @@
 package com.noah.jwt.integration.service;
 
 import com.noah.jwt.entities.User;
+import com.noah.jwt.exceptions.UserNameNotUniqueException;
 import com.noah.jwt.integration.config.PostgresTest;
 import com.noah.jwt.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +26,6 @@ class UserServiceTest extends PostgresTest {
 
   @Autowired
   private UserService userService;
-
   @Autowired
   private PasswordEncoder passwordEncoder;
 
@@ -49,7 +48,7 @@ class UserServiceTest extends PostgresTest {
             .password(PASSWORD)
             .createdAt(LocalDateTime.now())
             .build();
-    assertThrows(DataIntegrityViolationException.class, () -> userService.createUser(user));
+    assertThrows(UserNameNotUniqueException.class, () -> userService.createUser(user));
   }
 
   @Test

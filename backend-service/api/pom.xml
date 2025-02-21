@@ -102,9 +102,9 @@
                                 ${basedir}/src/main/resources/authentication-api.yaml
                             </inputSpec>
                             <generatorName>spring</generatorName>
-                            <packageName>com.noah.dotrecipe.authentication</packageName>
-                            <apiPackage>com.noah.dotrecipe.authentication.api</apiPackage>
-                            <modelPackage>com.noah.dotrecipe.authentication.dto</modelPackage>
+                            <packageName>com.noah.jwt</packageName>
+                            <apiPackage>com.noah.jwt.api</apiPackage>
+                            <modelPackage>com.noah.jwt.dto</modelPackage>
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <supportingFilesToGenerate>ApiUtil.java,openapi.yaml</supportingFilesToGenerate>
 

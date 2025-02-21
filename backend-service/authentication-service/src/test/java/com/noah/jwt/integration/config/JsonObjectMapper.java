@@ -11,4 +11,12 @@ public class JsonObjectMapper {
       throw new RuntimeException(e);
     }
   }
+  
+  public static <T> T asObject(final String json, Class<T> clazz) {
+    try {
+      return new ObjectMapper().readValue(json, clazz);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

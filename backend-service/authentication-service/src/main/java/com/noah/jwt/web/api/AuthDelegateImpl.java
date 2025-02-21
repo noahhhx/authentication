@@ -1,9 +1,9 @@
 package com.noah.jwt.web.api;
 
-import com.noah.dotrecipe.authentication.api.AuthApiDelegate;
-import com.noah.dotrecipe.authentication.dto.JwtTokenDto;
-import com.noah.dotrecipe.authentication.dto.LoginDto;
-import com.noah.dotrecipe.authentication.dto.RegisterDto;
+import com.noah.jwt.api.AuthApiDelegate;
+import com.noah.jwt.dto.JwtTokenDto;
+import com.noah.jwt.dto.LoginDto;
+import com.noah.jwt.dto.RegisterDto;
 import com.noah.jwt.entities.User;
 import com.noah.jwt.exceptions.UserNameNotUniqueException;
 import com.noah.jwt.mapper.UserMapper;

@@ -1,6 +1,6 @@
 package com.noah.jwt.config;
 
-import com.noah.dotrecipe.authentication.dto.JwtTokenDto;
+import com.noah.jwt.dto.JwtTokenDto;
 import com.noah.jwt.entities.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;

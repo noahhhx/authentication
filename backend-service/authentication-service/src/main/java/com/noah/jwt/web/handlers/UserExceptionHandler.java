@@ -1,6 +1,6 @@
 package com.noah.jwt.web.handlers;
 
-import com.noah.dotrecipe.authentication.dto.ErrorDto;
+import com.noah.jwt.dto.ErrorDto;
 import com.noah.jwt.exceptions.UserNameNotUniqueException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

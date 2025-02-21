@@ -9,9 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -46,27 +44,32 @@ public class User implements UserDetails {
   private String password;
 
   @Email
-  @Column(unique = true, nullable = false)
+  @Column(unique = true)
   private String email;
 
   @Column(nullable = false)
-  private LocalDateTime createdAt;
+  @Builder.Default
+  private LocalDateTime createdAt = LocalDateTime.now();
 
   @OneToMany(mappedBy = "user")
   @ToString.Exclude
   private Set<Authority> authorities = new HashSet<>();
 
-  @Column
-  private Integer failedAttempts;
+  @Column(nullable = false)
+  @Builder.Default
+  private Integer failedAttempts = 0;
 
   @Column(nullable = false)
-  private Boolean accountLocked;
+  @Builder.Default
+  private Boolean accountLocked = false;
 
   @Column(nullable = false)
-  private Boolean credentialsExpired;
+  @Builder.Default
+  private Boolean credentialsExpired = false;
 
   @Column(nullable = false)
-  private Boolean enabled;
+  @Builder.Default
+  private Boolean enabled = true;
 
 
   @Override

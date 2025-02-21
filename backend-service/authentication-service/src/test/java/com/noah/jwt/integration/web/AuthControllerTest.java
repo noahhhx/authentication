@@ -2,8 +2,9 @@ package com.noah.jwt.integration.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noah.dotrecipe.authentication.dto.JwtTokenDto;
-import com.noah.dotrecipe.authentication.dto.LoginDto;
+import com.noah.jwt.dto.ErrorDto;
+import com.noah.jwt.dto.JwtTokenDto;
+import com.noah.jwt.dto.LoginDto;
 import com.noah.jwt.integration.config.PostgresTest;
 import com.noah.jwt.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.noah.jwt.integration.config.JsonObjectMapper.asObject;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @AutoConfigureMockMvc
@@ -53,9 +55,14 @@ class AuthControllerTest extends PostgresTest {
             .password(PASSWORD)
             .build()
     );
-    performPostRequestAndExpectStatus(json, REGISTER_URL,
+    MvcResult result = performPostRequestAndExpectStatus(json, REGISTER_URL,
         MockMvcResultMatchers.status().is4xxClientError())
-        .andExpect(content().string("User already exists"));
+        .andExpect(
+            content().contentType(MediaType.APPLICATION_JSON)
+        ).andReturn();
+    
+    ErrorDto error = asObject(result.getResponse().getContentAsString(), ErrorDto.class);
+    Assertions.assertEquals("DUPLICATE_USER_NAME", error.getCode());
   }
 
   @Test
@@ -85,7 +92,7 @@ class AuthControllerTest extends PostgresTest {
   void testLoginWithFakeUser() throws Exception {
     String json = getLoginJson(USERNAME + "1", PASSWORD);
     performPostRequestAndExpectStatus(json, LOGIN_URL,
-        MockMvcResultMatchers.status().isUnauthorized())
+        MockMvcResultMatchers.status().isBadRequest())
         .andExpect(content().string("Invalid username or password"));
   }
 

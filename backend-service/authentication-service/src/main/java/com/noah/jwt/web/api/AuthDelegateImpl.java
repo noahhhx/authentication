@@ -5,7 +5,9 @@ import com.noah.jwt.dto.JwtTokenDto;
 import com.noah.jwt.dto.LoginDto;
 import com.noah.jwt.dto.RegisterDto;
 import com.noah.jwt.entities.User;
+import com.noah.jwt.exceptions.UserLockedException;
 import com.noah.jwt.exceptions.UserNameNotUniqueException;
+import com.noah.jwt.exceptions.UserNotExistsException;
 import com.noah.jwt.mapper.UserMapper;
 import com.noah.jwt.config.TokenGenerator;
 import com.noah.jwt.service.UserService;
@@ -53,7 +55,10 @@ public class AuthDelegateImpl implements AuthApiDelegate {
   @Override
   public ResponseEntity<JwtTokenDto> login(LoginDto loginDto) {
     if (!userService.userExists(loginDto.getUsername())) {
-      return ResponseEntity.badRequest().build();
+      throw new UserNotExistsException(
+          MessageFormat.format(
+              "Username {0} not found", loginDto.getUsername())
+      );
     }
     Authentication authentication =
         daoAuthenticationProvider.authenticate(
@@ -73,8 +78,10 @@ public class AuthDelegateImpl implements AuthApiDelegate {
     Jwt jwt = (Jwt) authentication.getCredentials();
     User user = userService.findById(UUID.fromString(jwt.getSubject()));
     if (!user.isAccountNonLocked()) {
-      //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is locked");
-      return ResponseEntity.badRequest().build();
+      throw new UserLockedException(
+          MessageFormat.format(
+              "User {0} is locked", user.getUsername())
+      );
     }
     return ResponseEntity.ok(tokenGenerator.createToken(authentication));
   }

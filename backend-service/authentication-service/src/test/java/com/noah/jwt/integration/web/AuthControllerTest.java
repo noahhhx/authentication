@@ -57,9 +57,8 @@ class AuthControllerTest extends PostgresTest {
     );
     MvcResult result = performPostRequestAndExpectStatus(json, REGISTER_URL,
         MockMvcResultMatchers.status().is4xxClientError())
-        .andExpect(
-            content().contentType(MediaType.APPLICATION_JSON)
-        ).andReturn();
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
     
     ErrorDto error = asObject(result.getResponse().getContentAsString(), ErrorDto.class);
     Assertions.assertEquals("DUPLICATE_USER_NAME", error.getCode());
@@ -91,9 +90,13 @@ class AuthControllerTest extends PostgresTest {
   @DisplayName("Test Invalid Login - user doesn't exist")
   void testLoginWithFakeUser() throws Exception {
     String json = getLoginJson(USERNAME + "1", PASSWORD);
-    performPostRequestAndExpectStatus(json, LOGIN_URL,
+    MvcResult result = performPostRequestAndExpectStatus(json, LOGIN_URL,
         MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(content().string("Invalid username or password"));
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    ErrorDto error = asObject(result.getResponse().getContentAsString(), ErrorDto.class);
+    Assertions.assertEquals("USER_NOT_EXISTS", error.getCode());
   }
 
   @Test

@@ -1,0 +1,31 @@
+services:
+  auth-service:
+    image: ghcr.io/noahgiles1/authentication:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/my_db
+      - DATASOURCE_USERNAME=my_user
+      - DATASOURCE_PASSWORD=password
+    depends_on:
+      - postgres-db
+
+  postgres-db:
+    image: 'postgres:15-alpine'
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=my_db
+      - POSTGRES_USER=my_user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U my_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

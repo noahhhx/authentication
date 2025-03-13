@@ -85,6 +85,33 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
+          
+  # TODO add security to this endpoint
+  /users/{userId}:
+    get: 
+      tags:
+        - User Service
+      summary: Get a User
+      operationId: getUser
+      description: Get a User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'  # You'll need to define this schema
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
 
 components:
   schemas:
@@ -125,6 +152,14 @@ components:
         - userId
         - accessToken
         - refreshToken
+          
+    User:
+      type: object
+      properties: 
+        userId:
+          type: string
+        username:
+          type: string
     
     Error:
       type: object

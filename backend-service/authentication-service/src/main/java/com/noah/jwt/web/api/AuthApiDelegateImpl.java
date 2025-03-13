@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AuthDelegateImpl implements AuthApiDelegate {
+public class AuthApiDelegateImpl implements AuthApiDelegate {
 
   private final UserService userService;
   private final UserMapper userMapper;

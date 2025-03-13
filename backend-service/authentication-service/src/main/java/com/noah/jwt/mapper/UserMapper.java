@@ -1,6 +1,7 @@
 package com.noah.jwt.mapper;
 
 import com.noah.jwt.dto.RegisterDto;
+import com.noah.jwt.dto.UserDto;
 import com.noah.jwt.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,4 +15,7 @@ public interface UserMapper {
 
   @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
   User toUser(RegisterDto registerDto);
+  
+  @Mapping(source = "id", target = "userId")
+  UserDto toUserDto(User user);
 }

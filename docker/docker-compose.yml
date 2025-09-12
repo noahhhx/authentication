@@ -1,0 +1,13 @@
+services:
+  postgres:
+    container_name: auth-database
+    network_mode: host # TODO - temp since running Mullvad
+    image: postgres:17.6-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql

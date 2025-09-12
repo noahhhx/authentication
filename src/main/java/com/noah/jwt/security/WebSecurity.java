@@ -23,7 +23,7 @@ public class WebSecurity {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-            .securityMatcher("/api/auth/*", "/api/users/*")
+            .securityMatcher("/api/auth/*", "/api/users/*", "/api/authorities/*")
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/*").permitAll()
                     .anyRequest().authenticated()

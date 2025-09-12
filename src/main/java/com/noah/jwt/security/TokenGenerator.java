@@ -3,6 +3,7 @@ package com.noah.jwt.security;
 import com.noah.jwt.db.User;
 import com.noah.jwt.dto.TokenDto;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,6 +23,9 @@ public class TokenGenerator {
   private final JwtEncoder accessTokenEncoder;
   private final JwtEncoder refreshTokenEncoder;
 
+  @Value("${spring.application.name:auth-service}")
+  private String applicationName;
+
   public TokenGenerator(JwtEncoder accessTokenEncoder,
                         @Qualifier("jwtRefreshTokenEncoder") JwtEncoder refreshTokenEncoder) {
     this.accessTokenEncoder = accessTokenEncoder;
@@ -33,10 +37,12 @@ public class TokenGenerator {
     Instant now = Instant.now();
 
     JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-            .issuer("myApp")
+            .issuer(applicationName)
             .issuedAt(now)
             .expiresAt(now.plus(5, ChronoUnit.MINUTES))
             .subject(String.valueOf(user.getId()))
+            .claim("authorities",
+                    user.getAuthorities().stream().map(a -> a.getAuthority()).toList())
             .build();
 
     return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
@@ -47,7 +53,7 @@ public class TokenGenerator {
     Instant now = Instant.now();
 
     JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-            .issuer("myApp")
+            .issuer(applicationName)
             .issuedAt(now)
             .expiresAt(now.plus(30, ChronoUnit.DAYS))
             .subject(String.valueOf(user.getId()))

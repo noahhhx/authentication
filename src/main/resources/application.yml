@@ -7,16 +7,9 @@ refresh-token:
   private: ${REFRESH_TOKEN_PRIVATE_KEY_PATH}
   public: ${REFRESH_TOKEN_PUBLIC_KEY_PATH}
 spring:
-  profiles:
-    active: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/my_db
-    username: my_user
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: user
     password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-logging:
-  level:
-    org.springframework.security: DEBUG
+  application:
+    name: auth-service

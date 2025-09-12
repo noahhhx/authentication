@@ -1,6 +1,7 @@
 package com.noah.jwt.integration.config;
 
 import com.noah.jwt.db.User;
+import com.noah.jwt.db.repository.AuthorityRepository;
 import com.noah.jwt.db.repository.UserRepository;
 import com.noah.jwt.service.UserManager;
 import org.junit.jupiter.api.AfterEach;
@@ -30,6 +31,8 @@ public abstract class PostgresTest {
   @Autowired
   private UserRepository userRepository;
   @Autowired
+  private AuthorityRepository authorityRepository;
+  @Autowired
   private UserManager userManager;
 
   @DynamicPropertySource
@@ -53,6 +56,7 @@ public abstract class PostgresTest {
 
   @AfterEach
   public void afterEach() {
+    authorityRepository.deleteAll();
     userRepository.deleteAll();
   }
 }

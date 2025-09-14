@@ -27,7 +27,8 @@ public abstract class PostgresTest {
   public static final String PASSWORD = "PASSWORD";
   @Container
   @ServiceConnection
-  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
+  public static PostgreSQLContainer postgreSQLContainer =
+          new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
   @Autowired
   private UserRepository userRepository;
   @Autowired
@@ -37,7 +38,10 @@ public abstract class PostgresTest {
 
   @DynamicPropertySource
   static void dynamicProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.data.mongodb.uri", postgreSQLContainer::getJdbcUrl);
+    registry.add("spring.active.profiles", () -> "test");
+    registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+    registry.add("spring.username.url", postgreSQLContainer::getUsername);
+    registry.add("spring.password.url", postgreSQLContainer::getPassword);
   }
 
   @BeforeAll
